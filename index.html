@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Ilkokul 1-4 icin aile destekli aylik yapay zeka odev programi. Alti ders, sekiz ay, 32 proje.">
+<meta property="og:title" content="Yap, Sor, Karşılaştır">
+<meta property="og:description" content="Ilkokul 1-4 icin aile destekli aylik yapay zeka odev programi. Alti ders, sekiz ay, 32 proje.">
+<meta property="og:type" content="article">
+<style>
+  :root{color-scheme:light dark}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+<title>Yap, Sor, Karşılaştır</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#F4F4EF; --surface:#FFFFFF; --surface-2:#EBEBE3;
+    --ink:#17233F; --ink-2:#46506B; --ink-3:#787F94;
+    --rule:#D6D6CB; --rule-soft:#E6E6DC;
+    --mark:#B93B31; --mark-ink:#8E2B23; --mark-soft:#F7E6E3;
+    --safe:#2F6B52; --safe-soft:#E3EFE8;
+    --grid-line:rgba(23,35,63,.055);
+    --shadow:0 1px 2px rgba(23,35,63,.05), 0 6px 18px -10px rgba(23,35,63,.18);
+    --f-display:"Zilla Slab",Georgia,"Times New Roman",serif;
+    --f-body:"IBM Plex Sans","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --f-mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#13151B; --surface:#1A1D25; --surface-2:#222630;
+      --ink:#E9E8E1; --ink-2:#B2B6C2; --ink-3:#848A99;
+      --rule:#333846; --rule-soft:#272B35;
+      --mark:#E4796E; --mark-ink:#F0A198; --mark-soft:#38201D;
+      --safe:#74C29A; --safe-soft:#1B2C24;
+      --grid-line:rgba(233,232,225,.045);
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px -10px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#13151B; --surface:#1A1D25; --surface-2:#222630;
+    --ink:#E9E8E1; --ink-2:#B2B6C2; --ink-3:#848A99;
+    --rule:#333846; --rule-soft:#272B35;
+    --mark:#E4796E; --mark-ink:#F0A198; --mark-soft:#38201D;
+    --safe:#74C29A; --safe-soft:#1B2C24;
+    --grid-line:rgba(233,232,225,.045);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 18px -10px rgba(0,0,0,.6);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:var(--f-body); font-size:16px; line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+  h1,h2,h3,h4{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.18}
+  p{margin:0}
+  a{color:var(--mark-ink);text-decoration-thickness:1px;text-underline-offset:2px}
+  :focus-visible{outline:2px solid var(--mark);outline-offset:3px;border-radius:2px}
+  code{font-family:var(--f-mono);font-size:.9em}
+
+  .mast{
+    border-bottom:1px solid var(--rule);
+    background:
+      linear-gradient(var(--grid-line) 1px,transparent 1px) 0 0/100% 26px,
+      linear-gradient(90deg,var(--grid-line) 1px,transparent 1px) 0 0/26px 100%,
+      var(--surface);
+  }
+  .mast-in{padding:64px 0 52px;display:flex;flex-direction:column;gap:26px}
+  .eyebrow{
+    font-family:var(--f-mono);font-size:11.5px;font-weight:500;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ink-3);
+  }
+  h1{font-size:clamp(40px,6.2vw,68px);font-weight:600;letter-spacing:-.022em}
+  h1 .comma{color:var(--mark)}
+  .lede{font-size:clamp(17px,2vw,19.5px);color:var(--ink-2);max-width:60ch}
+  .meta{
+    display:flex;flex-wrap:wrap;gap:0 30px;row-gap:10px;
+    font-family:var(--f-mono);font-size:12px;color:var(--ink-3);
+    padding-top:22px;border-top:1px solid var(--rule);
+  }
+  .meta b{color:var(--ink-2);font-weight:500}
+
+  section{padding:58px 0;border-bottom:1px solid var(--rule-soft)}
+  section:last-of-type{border-bottom:0}
+  .sec-head{display:flex;flex-direction:column;gap:12px;margin-bottom:32px}
+  .sec-head h2{font-size:clamp(26px,3.4vw,34px);font-weight:600;letter-spacing:-.015em}
+  .sec-head p{color:var(--ink-2);max-width:66ch}
+  .stack{display:flex;flex-direction:column;gap:20px}
+
+  .scroller{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--surface)}
+  table{border-collapse:collapse;width:100%;font-size:14px;min-width:620px}
+  caption{
+    text-align:left;padding:13px 16px;border-bottom:1px solid var(--rule);
+    font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--ink-3);background:var(--surface-2);
+  }
+  th,td{padding:11px 16px;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule-soft)}
+  thead th{
+    font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.075em;
+    text-transform:uppercase;color:var(--ink-3);background:var(--surface-2);
+    border-bottom:1px solid var(--rule);white-space:nowrap;
+  }
+  tbody tr:last-child td{border-bottom:0}
+  .num{font-variant-numeric:tabular-nums}
+
+  .note{
+    border:1px solid var(--rule);border-left:3px solid var(--ink-3);
+    background:var(--surface);padding:18px 22px;border-radius:3px;
+    display:flex;flex-direction:column;gap:10px;
+  }
+  .note.warn{border-left-color:var(--mark);background:var(--mark-soft)}
+  .note.good{border-left-color:var(--safe);background:var(--safe-soft)}
+  .note h4{font-size:16.5px;font-weight:600}
+  .note p,.note li{font-size:14.5px;color:var(--ink-2)}
+  .note.warn p,.note.warn li,.note.good p,.note.good li{color:var(--ink)}
+
+  .tag{
+    display:inline-block;font-family:var(--f-mono);font-size:10.5px;font-weight:600;
+    letter-spacing:.09em;text-transform:uppercase;padding:3px 8px;border-radius:2px;
+    border:1px solid currentColor;
+  }
+  .tag.red{color:var(--mark)}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .step{
+    background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+    padding:22px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);
+  }
+  .step-n{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mark);font-weight:600}
+  .step h4{font-size:21px;font-weight:600}
+  .step .dur{font-family:var(--f-mono);font-size:12px;color:var(--ink-3)}
+  .step p{font-size:14.5px;color:var(--ink-2)}
+
+  .ladder{display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:3px;overflow:hidden;background:var(--surface)}
+  .rung{display:grid;grid-template-columns:96px 1fr 1fr;gap:20px;padding:15px 20px;align-items:start;border-bottom:1px solid var(--rule-soft)}
+  .rung:last-child{border-bottom:0}
+  .rung-g{font-family:var(--f-display);font-size:15px;font-weight:600;color:var(--mark);white-space:nowrap}
+  .rung-do{font-size:14.5px;color:var(--ink-2)}
+  .rung-goal{font-size:14.5px;font-weight:500}
+  .rung:nth-child(1){background:linear-gradient(90deg,var(--surface-2) 0 4%,transparent 4%)}
+  .rung:nth-child(2){background:linear-gradient(90deg,var(--surface-2) 0 8%,transparent 8%)}
+  .rung:nth-child(3){background:linear-gradient(90deg,var(--surface-2) 0 12%,transparent 12%)}
+  .rung:nth-child(4){background:linear-gradient(90deg,var(--surface-2) 0 16%,transparent 16%)}
+
+  .theme{margin-bottom:32px;border:1px solid var(--rule);border-radius:3px;overflow:hidden;background:var(--surface)}
+  .theme-head{padding:17px 22px;background:var(--surface-2);border-bottom:1px solid var(--rule);display:flex;flex-direction:column;gap:10px}
+  .theme-top{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .theme-n{font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.1em;color:var(--mark)}
+  .theme-head h3{font-size:22px;font-weight:600}
+  .theme-lesson{
+    font-family:var(--f-mono);font-size:11px;font-weight:600;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--ink);border:1px solid var(--rule);
+    background:var(--surface);padding:3px 9px;border-radius:2px;
+  }
+  .theme-meta{font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);line-height:1.7}
+  .grades{display:grid;grid-template-columns:repeat(4,1fr)}
+  .gcard{padding:20px;border-right:1px solid var(--rule-soft);display:flex;flex-direction:column;gap:11px}
+  .gcard:last-child{border-right:0}
+  .gtop{display:flex;flex-direction:column;gap:3px}
+  .gnum{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+  .gcur{font-family:var(--f-mono);font-size:11px;color:var(--ink-3)}
+  .gcard h4{font-size:17.5px;font-weight:600;color:var(--ink)}
+  .bit{display:flex;flex-direction:column;gap:3px}
+  .bit-l{font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--mark)}
+  .bit-l.sor{color:var(--ink-3)}
+  .bit p{font-size:13.6px;line-height:1.55;color:var(--ink-2)}
+
+  ul.clean{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px}
+  ul.clean li{font-size:14.5px;color:var(--ink-2)}
+  .note.warn ul.clean li,.note.good ul.clean li{color:var(--ink)}
+
+  footer{padding:40px 0 62px;border-top:1px solid var(--rule);background:var(--surface)}
+  footer .src{font-size:13.5px;color:var(--ink-2);display:flex;flex-direction:column;gap:7px}
+
+  @media (max-width:960px){
+    .grades{grid-template-columns:repeat(2,1fr)}
+    .gcard{border-bottom:1px solid var(--rule-soft)}
+    .gcard:nth-child(2){border-right:0}
+    .steps{grid-template-columns:1fr}
+  }
+  @media (max-width:620px){
+    .wrap{padding:0 18px}
+    .grades{grid-template-columns:1fr}
+    .gcard{border-right:0}
+    .rung{grid-template-columns:1fr;gap:5px}
+    .mast-in{padding:44px 0 36px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="mast">
+  <div class="wrap mast-in">
+    <div class="eyebrow">AI-LA · İlkokul 1–4 · Aylık Ödev Programı</div>
+    <h1>Yap<span class="comma">,</span> Sor<span class="comma">,</span> Karşılaştır</h1>
+    <p class="lede">
+      Çocuk önce elleriyle üretir, sonra aynı konuyu yapay zekâya sorar, sonra ikisini
+      karşılaştırır. Altı ders, sekiz ay, otuz iki proje — her ay başka bir dersten.
+    </p>
+    <div class="meta">
+      <span><b>Kademe</b> 1, 2, 3, 4. sınıf</span>
+      <span><b>Sıklık</b> Ayda bir ödev</span>
+      <span><b>Süre</b> 2–3 saat</span>
+      <span><b>Yer</b> Evde, aile desteğiyle</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="sec-head">
+      <h2>Ödev nasıl işliyor</h2>
+      <p>Aile her ay aynı rutini öğrensin diye yapı sabit. Toplam 2–3 saat, tek oturumda
+        yapılması gerekmiyor.</p>
+    </div>
+    <div class="stack">
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">Adım 1</div>
+          <h4>Yap</h4>
+          <div class="dur">~1–1,5 saat · ekransız</div>
+          <p>Çocuk elleriyle bir şey üretir: çizer, keser, sayar, ölçer, deney yapar.
+            <b>Bu adımda YZ yok.</b> Çocuğun kendi işi önce çıkmalı.</p>
+        </div>
+        <div class="step">
+          <div class="step-n">Adım 2</div>
+          <h4>Sor</h4>
+          <div class="dur">~30–45 dk · YZ ile tanışma</div>
+          <p>Çocuk aynı konuyu YZ'ye sorar, ailesi yaşa göre yardım eder. Amaç doğru cevabı almak
+            değil: YZ'nin ne olduğunu görmek. Her şeyi biliyor mu? Bizim bildiğimizi mi söylüyor?</p>
+        </div>
+        <div class="step">
+          <div class="step-n">Adım 3</div>
+          <h4>Karşılaştır</h4>
+          <div class="dur">~30 dk · teslim</div>
+          <p>Çocuk kendi ürünüyle YZ'nin söylediğini karşılaştırır ve kendi hesabından yükler:
+            ürünün fotoğrafı, artı tek cümlelik fark notu.</p>
+        </div>
+      </div>
+      <div class="note good">
+        <h4>Sıra neden böyle</h4>
+        <p><b>Önce üret, sonra sor.</b> Ters sırada olsaydı çocuk YZ'nin cevabını kopyalardı.
+          Bu sıra YZ'yi kopyalanacak bir kaynak değil, karşılaştırılacak ikinci bir görüş konumuna
+          koyuyor — 1. sınıftan itibaren kurulması gereken alışkanlık tam olarak bu.</p>
+        <p>Program bu yüzden ölçülebilir bir şey üretiyor: çocuğun elindeki gerçek sonuç ile YZ'nin
+          söylediği arasındaki <b>fark</b>. En güçlü projeler, farkın kaçınılmaz olduğu projelerdir —
+          kendi attığın zarın sonucunu, ninenin oyununu ya da senin mahallendeki çözümü YZ bilemez.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Her sınıf neden farklı</h2>
+      <p>Aynı ödev, dört farklı etkileşim düzeyi. Merdiven yukarı çıktıkça aile desteği azalıyor,
+        çocuğun eleştirel mesafesi artıyor.</p>
+    </div>
+    <div class="stack">
+      <div class="ladder">
+        <div class="rung">
+          <div class="rung-g">1. Sınıf</div>
+          <div class="rung-do">Aile soruyu yazar ve cevabı sesli okur. Çocuk "benimkiyle aynı mı, farklı mı?" der.</div>
+          <div class="rung-goal">YZ diye bir şey var ve konuşuyor</div>
+        </div>
+        <div class="rung">
+          <div class="rung-g">2. Sınıf</div>
+          <div class="rung-do">Çocuk sorusunu söyler, aile yazar. Cevaptan bir şey seçip ürününe ekler.</div>
+          <div class="rung-goal">YZ'ye soru sorulabilir, cevabı işe yarar</div>
+        </div>
+        <div class="rung">
+          <div class="rung-g">3. Sınıf</div>
+          <div class="rung-do">Çocuk soruyu kendi yazar, kendi bulduğuyla YZ'nin cevabını karşılaştırır.</div>
+          <div class="rung-goal">YZ ile ben farklı şeyler söyleyebiliriz</div>
+        </div>
+        <div class="rung">
+          <div class="rung-g">4. Sınıf</div>
+          <div class="rung-do">Çocuk YZ'nin eksik ya da yanlış yerini bulur ve kaynakla düzeltir.</div>
+          <div class="rung-goal">YZ yanılabilir, doğrulamak benim işim</div>
+        </div>
+      </div>
+      <div class="note">
+        <p><b>1. sınıf uyarısı.</b> Ekim–Aralık aralığında 1. sınıf henüz okuma yazma öğreniyor.
+          İlk üç ayın 1. sınıf projeleri hiç yazı gerektirmiyor.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Hangi ay hangi ders</h2>
+      <p>Program tek bir derse yaslanmıyor: sekiz ayın her biri farklı bir dersten çıkıyor.
+        Fen Bilimleri 3. sınıfta, Sosyal Bilgiler 4. sınıfta başladığı için, o ayların 1–2. sınıf
+        projeleri <b>Hayat Bilgisi'nin</b> karşılık gelen öğrenme alanına bağlanıyor. Türkçe,
+        Matematik ve Görsel Sanatlar dört sınıfta da paralel ilerlediği için doğrudan eşleşiyor.</p>
+    </div>
+    <div class="stack">
+      <div class="scroller">
+        <table>
+          <caption>Ders dağılımı · tymm.meb.gov.tr'den doğrulanmış program adları</caption>
+          <thead><tr><th style="width:70px">Ay</th><th style="width:130px">Ders</th><th>1–2. sınıf dayanağı</th><th>3–4. sınıf dayanağı</th></tr></thead>
+          <tbody>
+            <tr><td><b>Ekim</b></td><td>Görsel Sanatlar</td><td colspan="2">Millî Değerler ve Sanat · Renk ve Estetik · Çizim ve Görsel İfade</td></tr>
+            <tr><td><b>Kasım</b></td><td>Matematik</td><td>Sayılar ve Nicelikler · Veriye Dayalı Araştırma</td><td>Veriye Dayalı Araştırma · Olayların Olasılığı (4)</td></tr>
+            <tr><td><b>Aralık</b></td><td>Fen Bilimleri</td><td>Hayat Bilgisi: Doğa ve Çevre</td><td>Bilimsel Keşif Yolculuğu (3) · Bilime Yolculuk (4)</td></tr>
+            <tr><td><b>Ocak</b></td><td>Türkçe</td><td>Yol Arkadaşımız Kitaplar · Okuma Serüvenimiz</td><td>Bilgi Hazinemiz (3) · Kütüphanemiz (4)</td></tr>
+            <tr><td><b>Şubat</b></td><td>Hayat Bilgisi</td><td>Sağlığım ve Güvenliğim</td><td>Sağlığım ve Güvenliğim (3) · Sağlıklı Besleniyorum (4)</td></tr>
+            <tr><td><b>Mart</b></td><td>Matematik</td><td colspan="2">Nesnelerin Geometrisi</td></tr>
+            <tr><td><b>Nisan</b></td><td>Sosyal Bilgiler</td><td>Hayat Bilgisi: Ailem ve Toplum</td><td>Ailem ve Toplum (3) · Yaşayan Demokrasimiz (4)</td></tr>
+            <tr><td><b>Mayıs</b></td><td>Görsel Sanatlar</td><td>Müze ve Kültür</td><td>Müze ve Kültür (3) · Ortak Mirasımız (4)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        <p><b>Türkçe her ay zaten var.</b> Ocak'ta ana ders olmasının yanında, her ödevin fark notu
+          bir yazma alıştırması; 1–2. sınıfta konuşarak, 3–4. sınıfta yazarak. Program Türkçe'yi
+          tek aya sıkıştırmıyor, sekiz aya yayıyor.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>İki tasarım kuralı</h2>
+      <p>Bütün projeler bu iki kurala göre yazıldı.</p>
+    </div>
+    <div class="stack">
+      <div class="note warn">
+        <h4><span class="tag red">Kural 1</span> &nbsp;Sadece ürün fotoğraflanır</h4>
+        <p>Hiçbir projede <b>çocuğun, aile bireyinin veya ev içinin</b> fotoğrafı istenmez.
+          Yüklenen tek şey ödev çalışmasıdır: çizim, afiş, kart, kutu, maket, tablo, grafik,
+          deney düzeneği.</p>
+        <ul class="clean">
+          <li>Ürün düz bir masaya ya da zemine konur, sade arka planla çekilir.</li>
+          <li>Yönergelerde "fotoğraflan" ifadesi geçmez; yalnızca "ürününü fotoğrafla" geçer.</li>
+          <li>Çocuğun bir şey <i>yaptığını</i> göstermesi gerektiğinde, yaptığı işin kendisi değil
+            <b>onu anlatan çizim, çizelge ya da kullandığı nesne</b> çekilir.</li>
+        </ul>
+        <p><b>KVKK karşılığı:</b> Sisteme hiç yüz görüntüsü girmiyor. Görsel değerlendirme hiçbir
+          zaman biyometrik veri işlemiyor, ev içi görüntü saklanmıyor. Veli onayının kapsamı
+          "çocuğun ödev çalışmasının fotoğrafı" ile sınırlı kalıyor.</p>
+      </div>
+      <div class="note warn">
+        <h4><span class="tag red">Kural 2</span> &nbsp;Portre çizilmez</h4>
+        <p>Öğrenciden Atatürk'ün, millî kahramanların veya dinî şahsiyetlerin <b>yüzünü çizmesi
+          istenmez.</b> Bu yaşta iyi niyetle çizilmiş bir portre orantısız çıkabilir ve saygısızlık
+          olarak okunabilir; üstelik sistem o görseli puanlar.</p>
+        <p>Portre yerine dört yol kullanılıyor: <b>hazır görsel</b> (basılı fotoğraf yapıştırılır),
+          <b>sembol</b> (bayrak, ay-yıldız, çelenk), <b>eylem sahnesi</b> (kişinin yüzü değil yaptığı
+          iş) ve <b>soyut gösterim</b> (zaman şeridi, afiş, kart). Ekim ayının dört projesi bu dört
+          yolu kullanıyor.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Otuz iki proje</h2>
+      <p>Her kartta çocuğun ne üreteceği (<b>Yap</b>) ve YZ'ye ne soracağı (<b>Sor</b>) yer alıyor.
+        Yüklenen fotoğraf her zaman yalnızca üründür.</p>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head">
+        <div class="theme-top"><span class="theme-n">EKİM</span><h3>Cumhuriyet ve Millî Değerler</h3><span class="theme-lesson">Görsel Sanatlar</span><span class="tag red">Portre çizilmez</span></div>
+        <div class="theme-meta">29 Ekim ayına denk gelir · Değer: Vatanseverlik · Estetik</div>
+      </div>
+      <div class="grades">
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">1. Sınıf</div><div class="gcur">Millî Değerler ve Sanat</div></div>
+          <h4>Bayrak Panom</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Bir kartona bayrak panosu yap. Kırmızı ve beyaz kâğıttan ay ile yıldızı kes, yapıştır. Yanına Atatürk'ün hazır bir fotoğrafını ekle. Sadece panoyu fotoğrafla.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Ailen sorar: "Bayrağımızdaki ay ve yıldız ne anlatır?" Cevaptan bir şeyi ailen panonun altına yazsın.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">2. Sınıf</div><div class="gcur">Renk ve Estetik</div></div>
+          <h4>Cumhuriyet Rengi</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Cumhuriyet'i anlatan üç renk seç. O üç renkle bir resim yap ve her rengin yanına neden seçtiğini yaz.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye "Cumhuriyet ne demek?" diye sor. Cevaptan beğendiğin bir kelimeyi resmine ekle.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">3. Sınıf</div><div class="gcur">Çizim ve Görsel İfade</div></div>
+          <h4>Kahramanın İzi</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Millî Mücadele'den bir kahraman seç. Kart yap: adı, yaptığı iş, yeri, tarihi. Görsel için ya hazır fotoğrafını yapıştır ya da <b>yaptığı işi anlatan bir sahne çiz</b> — top arabası, dağ yolu, kağnı. Yüz çizme.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Aynı kişiyi YZ'ye sor. Senin kartında olmayan bilgiyi farklı renkle ekle.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">4. Sınıf</div><div class="gcur">Sanatın Görsel Dili</div></div>
+          <h4>Cumhuriyet Afişi</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Cumhuriyet'i anlatan bir afiş tasarla: bir simge, bir tarih, bir slogan, üç renk. Yazıyı ve düzeni sen kur.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Afişte kullanacağın tarihi ve olayı YZ'ye sor, sonra ders kitabından doğrula. Uyuşmuyorsa afişte doğrusunu yaz ve neyi düzelttiğini not et.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head">
+        <div class="theme-top"><span class="theme-n">KASIM</span><h3>Sayı, Veri ve Tahmin</h3><span class="theme-lesson">Matematik</span></div>
+        <div class="theme-meta">Değer: Dürüstlük · Sistematik olma</div>
+      </div>
+      <div class="grades">
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">1. Sınıf</div><div class="gcur">Sayılar ve Nicelikler</div></div>
+          <h4>Sayı Pazarı</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Fasulye, düğme ya da kapaklarla bir pazar tezgâhı kur. Her grubu ayrı ayrı say ve kaç tane olduğunu yanına yaz.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Ailen sorar: "On tane fasulyeyi saymanın kolay yolu nedir?" YZ'nin yolu seninkiyle aynı mı?</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">2. Sınıf</div><div class="gcur">Veriye Dayalı Araştırma</div></div>
+          <h4>Evimizin Grafiği</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Evde üç şeyi say: kaşık, kitap, ayakkabı. Her biri için renkli kutucuklar boyayarak bir sütun grafiği yap.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye "grafik ne işe yarar?" diye sor. Cevaptan bir cümleyi grafiğinin altına yazdır.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">3. Sınıf</div><div class="gcur">Veriye Dayalı Araştırma</div></div>
+          <h4>Beş Kişilik Anket</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Beş kişiye tek bir soru sor: "En sevdiğin meyve hangisi?" Cevapları çetele tut, sonra sütun grafiğine dök.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Aynı soruyu YZ'ye sor: "Çocuklar en çok hangi meyveyi sever?" YZ'nin tahmini senin verinle uyuştu mu? <b>Uymadıysa neden?</b></p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">4. Sınıf</div><div class="gcur">Olayların Olasılığı ve Veriye Dayalı Araştırma</div></div>
+          <h4>Zar Tahmini</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Bir zarı 30 kez at. Her sonucu çetele tut, sonra grafiğe dök. Hangi sayı en çok çıktı?</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Atmadan önce YZ'ye sor: "30 kez zar atsam hangi sayı kaç kez çıkar?" Tahminiyle gerçek sonucunu karşılaştır ve farkı açıkla.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head">
+        <div class="theme-top"><span class="theme-n">ARALIK</span><h3>Gözlem ve Deney</h3><span class="theme-lesson">Fen Bilimleri</span></div>
+        <div class="theme-meta">1–2. sınıf: Hayat Bilgisi · Doğa ve Çevre · Değer: Merak · Duyarlılık</div>
+      </div>
+      <div class="grades">
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">1. Sınıf</div><div class="gcur">Doğa ve Çevre</div></div>
+          <h4>Pencere Defterim</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Üç gün boyunca aynı saatte pencereden bak. Gördüğünü her gün çiz. Üç resmi yan yana diz ve fotoğrafla.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Ailen sorar: "Aralık ayında pencereden bakınca ne görünür?" Senin resimlerinde olan ama YZ'nin söylemediği bir şey var mı?</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">2. Sınıf</div><div class="gcur">Doğa ve Çevre</div></div>
+          <h4>Yaprak Ailesi</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Beş farklı yaprak topla. Büyükten küçüğe diz, kartona yapıştır, her birine bir isim ver.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye "yapraklar neden farklı şekillerde olur?" diye sor. Cevabı bir cümleyle kartonun altına yazdır.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">3. Sınıf</div><div class="gcur">Bilimsel Keşif Yolculuğu</div></div>
+          <h4>Deney Günlüğü</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Beş nesne seç. <b>Önce tahminini yaz:</b> hangisi suda batar, hangisi yüzer? Sonra dene ve sonucu tabloya işle. Düzeneği ve tabloyu fotoğrafla.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Aynı beş nesneyi YZ'ye sor. Üçünü karşılaştır: senin tahminin, YZ'nin tahmini, gerçek sonuç. Kim kaç tane tutturdu?</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">4. Sınıf</div><div class="gcur">Bilime Yolculuk</div></div>
+          <h4>YZ'ye Deney Yaptır</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>YZ'den evde yapılabilecek güvenli bir deney iste. Ailen yanındayken uygula ve düzeneğin adımlarını fotoğrafla.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Beklenen sonuçla gerçek sonucu karşılaştır. Fark varsa nedenini açıkla. YZ güvenlik uyarısı verdi mi, onu da yaz.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head">
+        <div class="theme-top"><span class="theme-n">OCAK</span><h3>Kitap, Bilgi ve Kaynak</h3><span class="theme-lesson">Türkçe</span></div>
+        <div class="theme-meta">Değer: Çalışkanlık · Bilgiye saygı</div>
+      </div>
+      <div class="grades">
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">1. Sınıf</div><div class="gcur">Yol Arkadaşımız Kitaplar</div></div>
+          <h4>Kitabımın Kapağı</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>En sevdiğin kitabın kapağını kendin yeniden çiz. Kitabın adını da yazmayı dene.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Ailen YZ'ye kitabın adını söyleyip "bu kitap ne anlatıyor?" diye sorar. Sen dinle: doğru mu anlatmış?</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">2. Sınıf</div><div class="gcur">Okuma Serüvenimiz</div></div>
+          <h4>Üç Resimde Kitap</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Okuduğun kitabı üç resimde anlat: başı, ortası, sonu.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye aynı kitabı özetlettir. YZ'nin atladığı bir bölüm var mı? Onu dördüncü resim yap.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">3. Sınıf</div><div class="gcur">Bilgi Hazinemiz</div></div>
+          <h4>Bilgi Avı</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Merak ettiğin bir soru seç. Cevabını bir kitaptan bul, karta yaz ve resmet.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Aynı soruyu YZ'ye sor. İki cevabı yan yana koy: hangisi daha çok bilgi verdi, hangisine daha çok güvendin, neden?</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">4. Sınıf</div><div class="gcur">Kütüphanemiz</div></div>
+          <h4>Kaynağı Sor</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Bir konu seç ve hakkında bildiklerini bir posterde topla.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye üç bilgi sor, sonra "bunu nereden biliyorsun?" diye sor. Her bilgiyi bir kitapla doğrulamayı dene; doğrulananları ve doğrulanamayanları ayrı sütuna yaz.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head">
+        <div class="theme-top"><span class="theme-n">ŞUBAT</span><h3>Sağlık ve Güvenlik</h3><span class="theme-lesson">Hayat Bilgisi</span></div>
+        <div class="theme-meta">4. sınıf: Fen Bilimleri · Sağlıklı Besleniyorum · Değer: Sağlıklı yaşam · Sorumluluk</div>
+      </div>
+      <div class="grades">
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">1. Sınıf</div><div class="gcur">Sağlığım ve Güvenliğim</div></div>
+          <h4>Günüm Üç Resimde</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Bir gününü üç resimde çiz: sabah, okul, akşam. Her resme sağlıklı bir alışkanlığını ekle — diş fırçalama, su içme, erken yatma.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Ailen sorar: "Birinci sınıf çocuğu günde kaç saat uyumalı?" Senin resminde olan bir şey mi söyledi, başka bir şey mi?</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">2. Sınıf</div><div class="gcur">Sağlığım ve Güvenliğim</div></div>
+          <h4>Sağlıklı Tabağım</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Kâğıttan yiyecekler kes ve bir kâğıt tabağa sağlıklı bir öğün diz. Her yiyeceğin adını yanına yaz.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye "sağlıklı bir tabakta neler olmalı?" diye sor. Tabağında eksik olan bir grubu kes ve ekle.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">3. Sınıf</div><div class="gcur">Sağlığım ve Güvenliğim</div></div>
+          <h4>Güvenli Yol Maketi</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Okula giden yolu masada maketle kur: yol, kaldırım, geçit, ışık. <b>Adres ya da sokak adı yazma.</b> Karşıdan geçtiğin yeri işaretle.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye "karşıdan geçerken nelere dikkat edilmeli?" diye sor. Maketinde eksik kalan bir güvenlik işaretini ekle.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">4. Sınıf</div><div class="gcur">Sağlıklı Besleniyorum</div></div>
+          <h4>Etiket Dedektifi</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Evdeki üç paketli yiyeceğin etiketini incele. Şeker miktarlarını bir tabloya yaz, en yükseği işaretle.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye "bir çocuk günde ne kadar şeker almalı?" diye sor. Tablondaki miktarlarla karşılaştır: hangisi sınırı aşıyor?</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head">
+        <div class="theme-top"><span class="theme-n">MART</span><h3>Şekiller ve Geometri</h3><span class="theme-lesson">Matematik</span></div>
+        <div class="theme-meta">Nesnelerin Geometrisi · Değer: Estetik · Sabır</div>
+      </div>
+      <div class="grades">
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">1. Sınıf</div><div class="gcur">Nesnelerin Geometrisi</div></div>
+          <h4>Şekil Avı</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Çevrende daire, kare ve üçgen bul. Her şekli bir kâğıda çiz ve o şekle benzeyen nesneyi çiziminin yanına koy.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Ailen sorar: "Tekerlek neden daire?" Cevabı dinle. Senin bulduğun daire de aynı sebeple mi daire?</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">2. Sınıf</div><div class="gcur">Nesnelerin Geometrisi</div></div>
+          <h4>Kâğıttan Şehir</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Kare, üçgen ve dikdörtgen kâğıtlar kes, onlarla bir şehir yap. Her şekilden kaç tane kullandığını altına yaz.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye "hangi şekil sağlam durur, hangisi devrilir?" diye sor. Bir öneriyi şehrinde dene: işe yaradı mı?</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">3. Sınıf</div><div class="gcur">Nesnelerin Geometrisi</div></div>
+          <h4>Simetri Kelebeği</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Kâğıdı ortadan katla, bir tarafını boya, kapat ve aç. Ortaya çıkan simetrik deseni çerçevele ve simetri eksenini çiz.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye "simetri nedir, evde nerede görülür?" diye sor. Verdiği örneklerden birini gerçekten bul ve yanına çiz.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">4. Sınıf</div><div class="gcur">Nesnelerin Geometrisi</div></div>
+          <h4>Kutu Açılımı</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Bir kutuyu kenarlarından aç ve açılımını kâğıda çiz. Yüz, ayrıt ve köşe sayısını yaz.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'den bir küp açılımı tarif etmesini iste ve <b>tarifi birebir uygula</b>: kes, katla. Küp oldu mu? Olmadıysa YZ hangi adımda yanıldı?</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head">
+        <div class="theme-top"><span class="theme-n">NİSAN</span><h3>Haklar ve Demokrasi</h3><span class="theme-lesson">Sosyal Bilgiler</span></div>
+        <div class="theme-meta">1–3. sınıf: Hayat Bilgisi · Ailem ve Toplum · 23 Nisan ayına denk gelir · Değer: Adalet · Saygı · Özgürlük</div>
+      </div>
+      <div class="grades">
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">1. Sınıf</div><div class="gcur">Ailem ve Toplum</div></div>
+          <h4>Oyun Hakkım</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>En sevdiğin üç oyunu çiz. Altına ailen şunu yazsın: "Her çocuğun oyun oynama hakkı vardır."</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Ailen sorar: "Çocukların hakları nelerdir?" Cevaptaki haklardan hangisi senin çizdiğin oyunlarla ilgili?</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">2. Sınıf</div><div class="gcur">Ailem ve Toplum</div></div>
+          <h4>Haklarım Afişi</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Çocukların bir hakkını seç: oyun, eğitim, sağlık, dinlenme. O hakkı anlatan bir afiş yap.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye "çocukların hakları nelerdir?" diye sor. Senin seçmediğin bir hakkı afişinin köşesine ekle.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">3. Sınıf</div><div class="gcur">Ailem ve Toplum</div></div>
+          <h4>Ev Kuralı Kartı</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Ailenle birlikte yeni bir ev kuralı belirleyin. Kuralı bir karta yaz ve resimle: kural ne, neden konuldu, kimi bağlar.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'den de bir ev kuralı önerisi iste. Ailenizin kuralıyla karşılaştır: hangisi sizin eve daha uygun, neden?</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">4. Sınıf</div><div class="gcur">Yaşayan Demokrasimiz</div></div>
+          <h4>Oylama Tablosu</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Evde bir konuyu oylayın: hafta sonu filmi, akşam yemeği. Oyları bir tabloya dök ve sadece tabloyu fotoğrafla.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye "oylama neden adildir, hangi durumda adil olmaz?" diye sor. Azınlıkta kalan kişinin ne hissettiğini gözlemle ve cevapla karşılaştır.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="theme">
+      <div class="theme-head">
+        <div class="theme-top"><span class="theme-n">MAYIS</span><h3>Kültür, Müze ve Miras</h3><span class="theme-lesson">Görsel Sanatlar</span></div>
+        <div class="theme-meta">4. sınıf: Sosyal Bilgiler · Ortak Mirasımız · Değer: Aile bütünlüğü · Kültürel miras</div>
+      </div>
+      <div class="grades">
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">1. Sınıf</div><div class="gcur">Müze ve Kültür</div></div>
+          <h4>Ninemin Oyunu</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Ailenden büyük birine çocukken oynadığı bir oyunu sor ve oyna. Sonra oyunun nasıl oynandığını bir kâğıda çizerek anlat. Oyunda kullanılan nesneyi (taş, ip, mendil) çizimin yanına koy.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Ailen YZ'ye oyunun adını sorar. YZ oyunu biliyor mu? Bilmiyorsa bu senin özel bilgin demektir.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">2. Sınıf</div><div class="gcur">Müze ve Kültür</div></div>
+          <h4>Kültür Hazinem</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Ailenizde eski bir eşya bul: tepsi, örtü, bakır kap, eski oyuncak. Eşyayı düz bir zemine koy, yanına onu anlatan bir resim çiz. Sadece eşyayı ve resmi çek.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>YZ'ye eşyanın ne olduğunu ve ne işe yaradığını sor. Ailenden de sor. İki cevabı karşılaştır.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">3. Sınıf</div><div class="gcur">Müze ve Kültür</div></div>
+          <h4>Üç Kuşak Oyunları</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Ailende üç kuşağın oynadığı oyunları öğren: senin, annenin/babanın, dedenin/ninenin. Üçünü de tek bir karta çiz.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Üç oyunu da YZ'ye sor. YZ'nin bilmediği oyunu işaretle ve o oyunu sen anlat — YZ'ye öğret.</p></div>
+        </div>
+        <div class="gcard">
+          <div class="gtop"><div class="gnum">4. Sınıf</div><div class="gcur">Ortak Mirasımız</div></div>
+          <h4>YZ Kültürümüzü Biliyor mu?</h4>
+          <div class="bit"><div class="bit-l">YAP</div><p>Yörenize ait bir gelenek, yemek ya da el sanatı seç. Ailenden öğren, örneğini yap ve ürünü fotoğrafla.</p></div>
+          <div class="bit"><div class="bit-l sor">SOR</div><p>Aynı şeyi YZ'ye sor, ailenden doğrulat. YZ'nin eksik, genel geçer ya da yanlış bildiği yeri yaz.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Yıl takvimi</h2>
+    </div>
+    <div class="scroller">
+      <table>
+        <caption>Aylık program</caption>
+        <thead><tr><th style="width:74px">Ay</th><th style="width:118px">Ders</th><th>1. Sınıf</th><th>2. Sınıf</th><th>3. Sınıf</th><th>4. Sınıf</th></tr></thead>
+        <tbody>
+          <tr><td><b>Eylül</b></td><td colspan="5" style="color:var(--ink-3)">Tanışma ayı — veli bilgilendirme, hesap açma, örnek ödev</td></tr>
+          <tr><td><b>Ekim</b></td><td>Görsel Sanatlar</td><td>Bayrak Panom</td><td>Cumhuriyet Rengi</td><td>Kahramanın İzi</td><td>Cumhuriyet Afişi</td></tr>
+          <tr><td><b>Kasım</b></td><td>Matematik</td><td>Sayı Pazarı</td><td>Evimizin Grafiği</td><td>Beş Kişilik Anket</td><td>Zar Tahmini</td></tr>
+          <tr><td><b>Aralık</b></td><td>Fen Bilimleri</td><td>Pencere Defterim</td><td>Yaprak Ailesi</td><td>Deney Günlüğü</td><td>YZ'ye Deney Yaptır</td></tr>
+          <tr><td><b>Ocak</b></td><td>Türkçe</td><td>Kitabımın Kapağı</td><td>Üç Resimde Kitap</td><td>Bilgi Avı</td><td>Kaynağı Sor</td></tr>
+          <tr><td><b>Şubat</b></td><td>Hayat Bilgisi</td><td>Günüm Üç Resimde</td><td>Sağlıklı Tabağım</td><td>Güvenli Yol Maketi</td><td>Etiket Dedektifi</td></tr>
+          <tr><td><b>Mart</b></td><td>Matematik</td><td>Şekil Avı</td><td>Kâğıttan Şehir</td><td>Simetri Kelebeği</td><td>Kutu Açılımı</td></tr>
+          <tr><td><b>Nisan</b></td><td>Sosyal Bilgiler</td><td>Oyun Hakkım</td><td>Haklarım Afişi</td><td>Ev Kuralı Kartı</td><td>Oylama Tablosu</td></tr>
+          <tr><td><b>Mayıs</b></td><td>Görsel Sanatlar</td><td>Ninemin Oyunu</td><td>Kültür Hazinem</td><td>Üç Kuşak Oyunları</td><td>YZ Kültürümüzü Biliyor mu?</td></tr>
+          <tr><td><b>Haziran</b></td><td colspan="5" style="color:var(--ink-3)">Sergi ayı — yıl boyu üretilenlerden okul sergisi</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Yükleme yöntemi</h2>
+      <p>Ödevi öğrenci kendi hesabından yükler. Veli cihazı verir ve yanında durur, yerine yapmaz.</p>
+    </div>
+    <div class="stack">
+      <div class="scroller">
+        <table>
+          <caption>Kim ne yapar</caption>
+          <thead><tr><th style="width:26%"></th><th>1–2. Sınıf</th><th>3–4. Sınıf</th></tr></thead>
+          <tbody>
+            <tr><td><b>Hesap</b></td><td>Öğrencinin kendi hesabı</td><td>Öğrencinin kendi hesabı</td></tr>
+            <tr><td><b>Cihaz</b></td><td>Velinin telefonu veya bilgisayarı</td><td>Velinin telefonu veya bilgisayarı</td></tr>
+            <tr><td><b>Fotoğrafı çeken</b></td><td>Veli — yalnızca ürünü çeker</td><td>Öğrenci veya veli — yalnızca ürünü çeker</td></tr>
+            <tr><td><b>Yüklemeyi yapan</b></td><td>Öğrenci, veli yanında; tıklamayı çocuk yapar</td><td>Öğrenci</td></tr>
+            <tr><td><b>Metni üreten</b></td><td><b>Çocuk konuşur, ses-metin yazar</b></td><td>Öğrenci yazar veya konuşur</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        <h4>Teslim edilen iki şey</h4>
+        <ul class="clean">
+          <li><b>Ürünün fotoğrafı</b> — çizim, afiş, kart, kutu, maket, tablo, grafik ya da deney düzeneği. İnsan yok, ev içi yok.</li>
+          <li><b>Tek cümlelik fark notu</b> — "Ben şunu buldum, YZ şunu dedi."</li>
+        </ul>
+      </div>
+      <div class="note good">
+        <h4>Ses-metin: konuşarak yazma</h4>
+        <p>Teslim ekranına mikrofonla konuşup metne dönüştürme eklenmeli. 1 ve 2. sınıf çocuğu
+          yazamadığı için metni bugün veli yazıyor; bu da ödevin fark notunu çocuğun değil velinin
+          cümlesi yapıyor. <b>Çocuk konuşunca metin çocuğun kalıyor.</b></p>
+        <ul class="clean">
+          <li><b>Ses saklanmaz, yalnızca metin saklanır.</b> Ses biyometrik veridir; saklamamak KVKK yükünü ortadan kaldırır.</li>
+          <li><b>Yazım hataları puanlanmaz.</b> Ses-metin çocuk telaffuzunda hata yapar; bu çocuğun değil çevirinin hatasıdır. Değerlendirme yalnızca anlama bakar.</li>
+          <li><b>Platform şeması değişmiyor.</b> Çıktı yine metin; yeni bir gönderim türü ya da ses yüklemesi gerekmiyor.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap src">
+    <div class="eyebrow" style="margin-bottom:6px">Kaynak · ders ve tema adları şu resmî sayfalardan doğrulandı</div>
+    <div><a href="https://tymm.meb.gov.tr/ogretim-programlari/ders/ilkokul-turkce-dersi">İlkokul Türkçe Dersi Öğretim Programı — Türkiye Yüzyılı Maarif Modeli</a></div>
+    <div><a href="https://tymm.meb.gov.tr/ogretim-programlari/ders/ilkokul-matematik-dersi">İlkokul Matematik Dersi Öğretim Programı — TYMM</a></div>
+    <div><a href="https://tymm.meb.gov.tr/ogretim-programlari/ders/hayat-bilgisi-dersi">Hayat Bilgisi Dersi Öğretim Programı — TYMM</a></div>
+    <div><a href="https://tymm.meb.gov.tr/ogretim-programlari/ders/fen-bilimleri-dersi">Fen Bilimleri Dersi Öğretim Programı — TYMM</a></div>
+    <div><a href="https://tymm.meb.gov.tr/ogretim-programlari/ders/gorsel-sanatlar-dersi-temel-egitim">Görsel Sanatlar Dersi Öğretim Programı — TYMM</a></div>
+    <div><a href="https://tymm.meb.gov.tr/ogretim-programlari/sosyal-bilgiler-dersi/5">Sosyal Bilgiler Dersi 4. Sınıf — TYMM</a></div>
+    <div style="margin-top:16px;color:var(--ink-3);font-size:12.5px;font-family:var(--f-mono)">
+      AI-LA · İlkokul 1–4 Aylık Ödev Programı
+    </div>
+  </div>
+</footer>
+</body>
+</html>
